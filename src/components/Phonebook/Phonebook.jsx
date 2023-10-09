@@ -1,54 +1,52 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 
-export default class Phonebook extends Component {
-  state = {
+function Phonebook({ onAddContact }) {
+  const [formData, setFormData] = useState({
     name: '',
     number: '',
-  };
+  });
 
-  // Observe input changes
-  onInputChange = event => {
-    // console.log(event.target.value);
-    this.setState({
-      [event.target.name]: event.target.value,
+  const onInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value,
     });
   };
 
-  // submiting form
-  handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const newContact = { name: this.state.name, number: this.state.number };
-    this.props.onAddContact(newContact);
-    this.setState({
+    onAddContact(formData);
+    setFormData({
       name: '',
       number: '',
     });
   };
 
-  render() {
-    return (
-      <>
-        <h1>Phonebook</h1>
-        <form onSubmit={this.handleSubmit}>
-          <p>Name</p>
-          <input
-            value={this.state.name}
-            onChange={this.onInputChange}
-            type="text"
-            name="name"
-            required
-          />
-          <p>Number</p>
-          <input
-            onChange={this.onInputChange}
-            value={this.state.number}
-            type="tel"
-            name="number"
-            required
-          />
-          <button type="submit">Add contact</button>
-        </form>
-      </>
-    );
-  }
+  return (
+    <>
+      <h1>Phonebook</h1>
+      <form onSubmit={handleSubmit}>
+        <p>Name</p>
+        <input
+          value={formData.name}
+          onChange={onInputChange}
+          type="text"
+          name="name"
+          required
+        />
+        <p>Number</p>
+        <input
+          onChange={onInputChange}
+          value={formData.number}
+          type="tel"
+          name="number"
+          required
+        />
+        <button type="submit">Add contact</button>
+      </form>
+    </>
+  );
 }
+
+export default Phonebook;
